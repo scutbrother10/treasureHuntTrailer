@@ -4,6 +4,11 @@
     <title>Search - w3cschool.cc</title>
 </head>
 <body>
+    <p>
+        #set static file: https://docs.djangoproject.com/en/1.10/howto/static-files/
+        {% load static %}
+        <img src="{% static "media/pokemon.jpg" %}" alt="My image"/>
+    </p>
     <form action="/search/" method="get">
         <input type="text" name="q">
         <input type="submit" value="Search">
