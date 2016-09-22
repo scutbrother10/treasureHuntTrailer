@@ -5,10 +5,15 @@
 </head>
 <body>
     <p>
-        #set static file: https://docs.djangoproject.com/en/1.10/howto/static-files/
+        <!- set static file: https://docs.djangoproject.com/en/1.10/howto/static-files/ -!>
         {% load static %}
         <img src="{% static "media/pokemon.jpg" %}" alt="My image"/>
     </p>
+    <video width="640" controls>
+         {% load static %}
+        <source src="{% static "media/mov_bbb.mp4" %}" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
     <form action="/search/" method="get">
         <input type="text" name="q">
         <input type="submit" value="Search">
