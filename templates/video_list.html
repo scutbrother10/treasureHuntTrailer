@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Videos</title>
+</head>
+<body>
+    <p>
+         <video width="640" controls>
+        <source src= {{first_video_path}} type="video/mp4">
+        Your browser does not support HTML5 vide.
+    </video>
+    </p>
+    <p>
+        {% for video in video_list %}
+		<dl>
+		  <li>{{video.video_name}}</li> </a>
+		</dl>
+    {% endfor %}
+    </p>
+
+</body>
+</html>
