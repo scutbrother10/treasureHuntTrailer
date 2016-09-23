@@ -16,12 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from search.views import search,search_form
-from trailer.views import video_list_view
+from trailer.views import video_list_view, video_detail_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^search-form/$', search_form),
     url(r'^search/$', search),
-    url(r'^video_index/$',video_list_view)
-    # url(r'^blog/(?P<video_id>\d{0,7})/$', video_list_view),
+    url(r'^video_index/$',video_list_view),
+    url(r'^video_index/(?P<video_id>\d{0,7})/$', video_detail_view),
 ]
