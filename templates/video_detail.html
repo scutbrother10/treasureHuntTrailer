@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video_detail</title>
+</head>
+<body>
+<h1>{{video.video_name}}(actor: {{ video.video_actor }}, director:{{ video.video_director }})</h1><a href={{url}}>Back</a></p>
+<p>
+    <video width="640" controls>
+        <source src= {{video.video_path}} type="video/mp4">
+        Your browser does not support HTML5 vide.
+    </video>
+</p>
+</body>
+</html>

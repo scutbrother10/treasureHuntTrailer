@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Videos</title>
+</head>
+<body>
+    <h2>Most hit trailer: {{first_video.video_name}}</h2>
+    <p>
+        <video width="640" controls>
+        <source src= {{first_video.video_path}} type="video/mp4">
+        Your browser does not support HTML5 vide.
+    </video>
+    </p>
+    <h2>Videos</h2>
+    <p>
+        {% for video in video_list %}
+		<dl>
+		  <img src={{video.video_pic_path}} alt="My image"/><a href={{url}}{{video.id}}><li>{{video.video_name}}</a></li>
+		</dl>
+    {% endfor %}
+    </p>
+
+</body>
+</html>
