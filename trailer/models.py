@@ -15,3 +15,5 @@ class Video(models.Model):
     video_path = models.CharField(max_length = 60)
     video_pic_path = models.CharField(max_length = 60)
     modified_date = models.DateTimeField(auto_now_add = True)
+    def __unicode__(self):
+       return str(self.id) + ". " + self.video_name
