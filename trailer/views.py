@@ -2,7 +2,7 @@ from trailer.models import Video
 from django.shortcuts import render_to_response, HttpResponseRedirect, render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-
+import json
 
 # Create your views here.
 def video_list_view(requset):
@@ -23,3 +23,12 @@ def video_detail_view(request, video_id):
         video = None
     return render_to_response("video_detail.html", {"video":video, "url":url})
 
+@csrf_exempt
+def check_product_info_view(request):
+    video_id = request.POST.get('videoId', '')
+    current = request.POST.get('current', '')
+    response_data = {}
+    if video_id != '':
+        print video_id
+        response_data['result'] = 'success'
+        return HttpResponse(json.dumps(response_data), content_type="application/json")

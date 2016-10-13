@@ -10,9 +10,9 @@
       <link rel="stylesheet" type="text/css" href="">
       <style type="text/css">
         body{position:relative;}
-        .inner{}
-        .divone{width:500px;height:300px;background:white;}
-        .ceng{position:absolute;top:0px;bottom:0px;width:500px;height:300px;}
+        .divIn{width:500px;height:300px;background:white;}
+        .divOut{position:absolute;top:0px;bottom:0px;width:500px;height:300px;}
+        .divProduct{position: absolute; top:10px; width:80px;height:30px;background:red; display:none;}
         .bg{width:100%;height:100%;
         /**透明层兼容**/
         filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;
@@ -31,6 +31,7 @@
         }
         #box2 a:hover{color:#999; border:2px solid #333; }
         #box2 a:hover span{display:inline; position:absolute;}
+
     </style>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script type="text/javascript">
@@ -40,8 +41,10 @@
                 var video = document.getElementById("myVideo");
                 if (video.paused) {
                     video.play();
+                    document.getElementById('productLayer').style.display = 'None';
                 }else {
                     video.pause();
+                    callAjaxWhenPaused(video);
                 }
             });
 
@@ -49,27 +52,56 @@
                 var video = document.getElementById("myVideo");
                 if (video.paused == false) {
                     video.pause();
+                    callAjaxWhenPaused(video);
                 }
             });
+
+            function callAjaxWhenPaused(video){
+                $.ajax({
+                    type : "POST",
+                    url : "/check_product_info/",
+                    data : {"videoId" : "1", "time": video.currentTime},
+                    cache: false,
+                    dataType: "json",
+                    success: function(response_data, statues, xml){
+                        if(response_data['result']=='success') {
+                            document.getElementById('productLayer').style.display = 'block';
+                            document.getElementById('productLayer').innerHTML = video.currentTime;
+                            return false;
+                        }else{
+                            document.getElementById('error1').innerHTML = response_data['result'];
+
+                        }
+
+                    },
+                    error: function(){
+                        alert("request failed");
+                    }
+                 });
+
+            }
 
         });
      </script>
  </head>
 
  <body>
-    <div class="inner">
-      <div class="divone">
+      <div class="divIn">
           <video id="myVideo" width="500" controls>
             <source src= {{video.video_path}} type="video/mp4">
             Your browser does not support HTML5 vide.
         </video>
       </div>    <!--body里的内容-->
 
-      <div class="ceng" id="overlayer">
+      <div class="divOut" id="overlayer">
             <!--覆盖的层-->
-{#        <div id="box2">#}
-{#            <a href=""><span><h1>testing<br>testing</h1></span><div>span</div></a>#}
-{#        </div> #}
+        <!--<div id="box2">
+            <a href=""><span><h1>testing<br>testing</h1></span><div>span</div></a>
+        </div> -->
      </div>
+        <div class="divProduct" id="productLayer">
+            testing
+        </div>
+    <div id="error1"></div>
  </body>
 </html>
