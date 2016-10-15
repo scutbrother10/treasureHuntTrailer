@@ -28,17 +28,20 @@ def check_product_info_view(request):
     video_id = request.POST.get('videoId', '')
     current_time = request.POST.get('time', '')
     print(int(float(current_time)))
+    response_data = {}
     try:
         video = Video.objects.get(id=video_id)
         products = Product.objects.filter(video = video, product_show_time = int(float(current_time)))
-        print products
+        if products.count() > 0:
+            product = products[0]
+            response_data['result'] = 'success'
+            response_data['product_name'] = product.product_name
+            response_data['product_buy_url'] = product.product_buy_url
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            response_data['result'] = 'failure'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
     except Video.DoesNotExist:
         video = None
 
-    if products.exists:
-        product = products[0]
-    response_data = {}
-    if video_id != '':
-        response_data['result'] = 'success'
-        response_data['product_name'] = product.product_name
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
