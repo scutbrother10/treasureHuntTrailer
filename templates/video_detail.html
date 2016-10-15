@@ -57,16 +57,20 @@
             });
 
             function callAjaxWhenPaused(video){
+                /* get url parameter */
+                var url = window.location.href
+                var video_id = url.charAt(url.length-2);
+
                 $.ajax({
                     type : "POST",
                     url : "/check_product_info/",
-                    data : {"videoId" : "1", "time": video.currentTime},
+                    data : {"videoId" : video_id, "time": video.currentTime},
                     cache: false,
                     dataType: "json",
                     success: function(response_data, statues, xml){
                         if(response_data['result']=='success') {
                             document.getElementById('productLayer').style.display = 'block';
-                            document.getElementById('productLayer').innerHTML = video.currentTime;
+                            document.getElementById('productLayer').innerHTML = response_data['product_name'];
                             return false;
                         }else{
                             document.getElementById('error1').innerHTML = response_data['result'];
