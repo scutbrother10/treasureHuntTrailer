@@ -33,38 +33,51 @@
         #box2 a:hover span{display:inline; position:absolute;}
 
     </style>
+        <link href="/static/js/node_modules/video.js/dist/video-js/video-js.css" rel="stylesheet">
+    <script src="/static/js/node_modules/video.js/dist/video-js/video.js"></script>
+    <link href="/static/css/videojs.thumbnails.css" rel="stylesheet">
+    <script src='/static/js/videojs.thumbnails.js'></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-        <script type="text/javascript">
-            /* add video control */
+    <script type="text/javascript">
+        /* add video control */
+        var player;
 		$(document).ready(function() {
+            var isPlaying = false;
+            player = videojs("my-video");
+            player.on(['waiting', 'pause'], function() {
+                isPlaying = false;
+            });
+
+             player.on('playing', function() {
+                isPlaying = true;
+            });
             $('#overlayer').click(function play() {
-                var video = document.getElementById("myVideo");
-                if (video.paused) {
-                    video.play();
+                //var video = videojs("my-video");
+                if (!isPlaying) {
+                    player.play();
                     document.getElementById('productLayer').style.display = 'None';
                 }else {
-                    video.pause();
-                    callAjaxWhenPaused(video);
+                    player.pause();
+                    callAjaxWhenPaused();
                 }
             });
 
             $('#overlayer').mouseover(function play() {
-                var video = document.getElementById("myVideo");
-                if (video.paused == false) {
-                    video.pause();
-                    callAjaxWhenPaused(video);
+                if (isPlaying) {
+                    player.pause();
+                    callAjaxWhenPaused();
                 }
             });
 
-            function callAjaxWhenPaused(video){
+
+            function callAjaxWhenPaused(){
                 /* get url parameter */
                 var url = window.location.href
                 var video_id = url.charAt(url.length-2);
-
                 $.ajax({
                     type : "POST",
                     url : "/check_product_info/",
-                    data : {"videoId" : video_id, "time": video.currentTime},
+                    data : {"videoId" : video_id, "time": player.currentTime()},
                     cache: false,
                     dataType: "json",
                     success: function(response_data, statues, xml){
@@ -77,7 +90,7 @@
                             a_element.text = product_name;
                             return false;
                         }else{
-                            document.getElementById('error1').innerHTML = video.currentTime;
+                            document.getElementById('error1').innerHTML = player.currentTime();
 
                         }
 
@@ -90,15 +103,16 @@
             }
 
         });
-     </script>
+    </script>
  </head>
 
  <body>
       <div class="divIn">
-          <video id="myVideo" width="500" controls>
+          <video id="my-video" width="500" height="400" class='video-js vjs-default-skin' controls>
             <source src= {{video.video_path}} type="video/mp4">
-            Your browser does not support HTML5 vide.
-        </video>
+            Your browser does not support HTML5 video.
+          </video>
+
       </div>    <!--body里的内容-->
 
       <div class="divOut" id="overlayer">
@@ -111,5 +125,44 @@
             <a herf ="" id = 'productLayerA'>testing</a>
         </div>
     <div id="error1"></div>
+    <script>
+        // TODO: to replce src as the right one
+            var video = videojs('my-video');
+            video.thumbnails({
+              0: {
+                src: 'thumbnails.png',
+                style: {
+                  left: '-60px',
+                  width: '600px',
+                  height: '68px',
+                  clip: 'rect(0, 120px, 68px, 0)'
+                }
+              },
+              10: {
+                style: {
+                  left: '-180px',
+                  clip: 'rect(0, 240px, 68px, 120px)'
+                }
+              },
+              20: {
+                style: {
+                  left: '-300px',
+                  clip: 'rect(0, 360px, 68px, 240px)'
+                }
+              },
+              30: {
+                style: {
+                  left: '-420px',
+                  clip: 'rect(0, 480px, 68px, 360px)'
+                }
+              },
+              40: {
+                style: {
+                  left: '-540px',
+                  clip: 'rect(0, 600px, 68px, 480px)'
+                }
+              }
+            });
+        </script>
  </body>
 </html>
