@@ -19,9 +19,11 @@ def video_detail_view(request, video_id):
 
     try:
         video = Video.objects.get(id=video_id)
+        thumbnails = video.video_thumbnail_path.split(',')
+        print thumbnails
     except Video.DoesNotExist:
         video = None
-    return render_to_response("video_detail.html", {"video":video, "url":url})
+    return render_to_response("video_detail.html", {"video":video, "url":url, "thumbnails": thumbnails})
 
 @csrf_exempt
 def check_product_info_view(request):
@@ -37,6 +39,7 @@ def check_product_info_view(request):
             response_data['result'] = 'success'
             response_data['product_name'] = product.product_name
             response_data['product_buy_url'] = product.product_buy_url
+            response_data['product_image_path'] = product.product_pic_path
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             response_data['result'] = 'failure'

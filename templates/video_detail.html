@@ -11,7 +11,7 @@
       <style type="text/css">
         body{position:relative;}
         .divIn{width:500px;height:300px;background:white;}
-        .divOut{position:absolute;top:0px;bottom:0px;width:500px;height:240px;}
+        .divOut{position:absolute;top:0px;bottom:0px;width:500px;height:352px;}
         .divProduct{position: absolute; top:10px; width:80px;height:30px;background:red; display:none;}
         .bg{width:100%;height:100%;
         /**透明层兼容**/
@@ -88,13 +88,19 @@
                             document.getElementById('productLayer').style.display = 'block';
                             var product_buy_url = response_data['product_buy_url'];
                             var product_name = response_data['product_name'];
+                            var product_image =response_data['product_image_path'];
                             var a_element = document.getElementById('productLayerA');
                             a_element.href = product_buy_url;
                             a_element.text = product_name;
+                            var image_element = document.getElementById('productLayerImage');
+                            if (product_image.length > 0) {
+                                image_element.src = product_image;
+                            }
+
                             return false;
                         }else{
                             document.getElementById('error1').innerHTML = player.currentTime();
-
+                            ocument.getElementById('productLayer').style.display = 'none';
                         }
 
                     },
@@ -109,7 +115,7 @@
     </script>
  </head>
 
- <body>
+ <body width = "500" height="410">
       <div class="divIn">
           <video id="my-video" width="500" height="400" class='video-js vjs-default-skin' controls>
             <source src= {{video.video_path}} type="video/mp4">
@@ -119,53 +125,57 @@
       </div>    <!--body里的内容-->
 
       <div class="divOut" id="overlayer">
-            <!--覆盖的层-->
-        <!--<div id="box2">
-            <a href=""><span><h1>testing<br>testing</h1></span><div>span</div></a>
-        </div> -->
      </div>
         <div class="divProduct" id="productLayer">
             <a herf ="" id = 'productLayerA'>testing</a>
+            <img id = 'productLayerImage' src="" width="60px" height="60px">
         </div>
     <div id="error1"></div>
     <script>
         // TODO: to add more scrs to db
-            var thumbnailPath = "http://127.0.0.1:8000" + "{{video.video_pic_path}}";
+{#        var i = 0;#}
+{#        {% for thubnail in {{thumbnails}} %}#}
+{#            i ++;#}
+{#            var thumbnail_i = thumbnail#}
+{#        {% endfor %}#}
+            var thumbnailPath = "http://127.0.0.1:8000" + "{{thumbnails.0}}";
             var video = videojs('my-video');
             video.thumbnails({
               0: {
                 src: thumbnailPath,
                 style: {
                   left: '-60px',
-                  width: '600px',
+                  width: '120px',
                   height: '68px',
                   clip: 'rect(0, 120px, 68px, 0)'
                 }
               },
               10: {
-                style: {
-                  left: '-180px',
-                  clip: 'rect(0, 240px, 68px, 120px)'
-                }
-              },
-              20: {
-                style: {
-                  left: '-300px',
-                  clip: 'rect(0, 360px, 68px, 240px)'
-                }
-              },
-              30: {
-                style: {
-                  left: '-420px',
-                  clip: 'rect(0, 480px, 68px, 360px)'
-                }
+                src: "http://127.0.0.1:8000" + "{{thumbnails.1}}",
+{#                style: {#}
+{#                  left: '-180px',#}
+{#                  clip: 'rect(0, 240px, 68px, 120px)'#}
+{#                }#}
               },
               40: {
-                style: {
-                  left: '-540px',
-                  clip: 'rect(0, 600px, 68px, 480px)'
-                }
-              }
+                scr: "http://127.0.0.1:8000" + "{{thumbnails.2}}",
+{#                style: {#}
+{#                  left: '-300px',#}
+{#                  clip: 'rect(0, 360px, 68px, 240px)'#}
+{#                }#}
+              },
+{#              30: {#}
+{#                style: {#}
+{#                  left: '-420px',#}
+{#                  clip: 'rect(0, 480px, 68px, 360px)'#}
+{#                }#}
+{#              },#}
+{#              40: {#}
+{#                style: {#}
+{#                  left: '-540px',#}
+{#                  clip: 'rect(0, 600px, 68px, 480px)'#}
+{#                }#}
+{#              }#}
             });
         </script>
  </body>
